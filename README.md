@@ -35,15 +35,6 @@ Web bilingüe (ES/EN) que documenta el universo de Find the Pyces 2, incluyendo:
 
 ---
 
-## 🚀 **Despliegue en GitHub Pages**
-
-1. Sube los archivos a un repositorio
-2. Ve a **Settings > Pages**
-3. Selecciona la rama `main` y guarda
-4. ¡Listo!
-
----
-
 ## 🛠️ **Tecnologías**
 
 - HTML5, CSS3, JavaScript
