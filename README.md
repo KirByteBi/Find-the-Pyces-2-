@@ -1,4 +1,7 @@
 # FtPy2 - Find the Pyces 2
+### VERSION 1.0.0 ###
+**README on Spanish, use translator if you want to understeand it well.**
+_____________________________________________________________________________________________________________________________
 
 Web informativa oficial del mundo de **Bitlands** y los **Pyces**.
 
