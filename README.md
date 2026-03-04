@@ -2,7 +2,7 @@
 
 Web informativa oficial del mundo de **Bitlands** y los **Pyces**.
 
-🌐 **Web en vivo**: [https://tu-usuario.github.io/ftpy2](https://tu-usuario.github.io/ftpy2)](https://kirbytebi.github.io/Find-the-Pyces-2-/)
+🌐 **Web en vivo**: [(https://kirbytebi.github.io/Find-the-Pyces-2-/)]
 
 ---
 
