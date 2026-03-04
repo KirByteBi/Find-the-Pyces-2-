@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FtPy2 - Bitlands Introduction</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="intro-page">
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">
+                <h2>Find the Pyces 2</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home" class="active">Home</a></li>
+                <li><a href="#introduction">Introduction</a></li>
+                <li><a href="What-is-a-Pyce-2.html" class="page-link-btn">What is a Pyce?</a></li>
+                <li><a href="Bitlands-en.html" class="simple-link">Bitlands</a></li>
+                <li><a href="Portalogy-en.html" class="simple-link">Portalogy</a></li>
+                <li><a href="Difficulties-en.html" class="simple-link">Difficulties</a></li>
+                <li><a href="Socials-en.html" class="simple-link">Socials</a></li>
+                <li><a href="FtPy-es.html" class="lang-switch">ES</a></li>
+                <li><a href="index.html" class="logout-btn">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section">
+        <div class="hero-content">
+            <h1 class="hero-title">Welcome to <span class="gradient-text">Find the Pyces 2</span></h1>
+            <p class="hero-subtitle">A world of curiosity, discovery, and hidden secrets</p>
+            <div class="hero-buttons">
+                <a href="#introduction" class="btn-primary">Discover Bitlands</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Introduction Section -->
+    <section id="introduction" class="intro-summary-section">
+        <div class="container">
+            <div class="summary-card">
+                <h2 class="section-title">Discover Bitlands</h2>
+                
+                <div class="summary-content">
+                    <p>In <strong>Find the Pyces (2)</strong>, you will explore <strong>Bitlands</strong>, where you'll discover exciting secrets like the city graffiti, explore mysterious caves and the active volcano of this world, or go shopping and unlock <strong>exclusive Pyces from the prequel</strong>! Bitlands invites you to discover its content.</p>
+                    
+                    <div class="divider"></div>
+                    
+                    <p>In this world, you'll have a rare tablet at your disposal called <strong class="pixible-text">Pixible</strong>.</p>
+                    
+                    <p>What does it do? On this tablet, you'll collect data from the Pyces you interact with and discover their hidden secrets. You can also see their difficulty and a hint to find them. The most difficult ones will have a <strong class="ardient-text">burning mark</strong>, so keep your eyes peeled.</p>
+                    
+                    <div class="divider"></div>
+                    
+                    <p>Players transform into <strong>"Travelers"</strong> who investigate the Pyces and will gradually discover that this world isn't perfect. Bitlands isn't all harmony, as there are <strong>dark secrets and horrors</strong> in these lands.</p>
+                    
+                    <div class="divider"></div>
+                    
+                    <p class="closing-statement">That being said... Are you ready to explore Bitlands?</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>FtPy2</h3>
+                    <p>Find the Pyces 2 - A world of discovery</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Links</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#introduction">Introduction</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Language</h4>
+                    <div class="social-links">
+                        <a href="FtPy-en.html">🇬🇧 English</a>
+                        <a href="FtPy-es.html">🇪🇸 Español</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Find the Pyces 2. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Active navigation highlight
+        window.addEventListener('scroll', () => {
+            let current = '';
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-menu a');
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (scrollY >= (sectionTop - 200)) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

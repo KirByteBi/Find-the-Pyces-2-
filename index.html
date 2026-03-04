@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | FtPy2</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body class="login-page">
+    <div class="login-container">
+        <div class="logo">
+            <img src="img/PycesIcon.png" alt="FtPy2 Logo">
+        </div>
+        <h1 id="title">FtPy2</h1>
+        
+        <!-- Tabs: Login / Register -->
+        <div class="auth-tabs">
+            <button class="tab-btn active" id="loginTab" onclick="showLogin()">LOGIN</button>
+            <button class="tab-btn" id="registerTab" onclick="showRegister()">REGISTER</button>
+        </div>
+
+        <!-- LOGIN FORM -->
+        <form id="loginForm" onsubmit="handleLogin(event)">
+            <div class="input-group">
+                <input type="text" id="loginUsername" placeholder="Username" required>
+            </div>
+            <div class="input-group">
+                <input type="password" id="loginPassword" placeholder="Password" required>
+            </div>
+            <button type="submit">ENTER</button>
+            <div id="message-container" class="message-container"></div>
+        </form>
+
+        <!-- REGISTER FORM (hidden by default) -->
+        <form id="registerForm" style="display: none;" onsubmit="handleRegister(event)">
+            <div class="input-group">
+                <input type="text" id="regUsername" placeholder="Choose a username" required minlength="3">
+            </div>
+            <div class="input-group">
+                <input type="password" id="regPassword" placeholder="Choose a password" required minlength="4">
+            </div>
+            <div class="input-group">
+                <input type="password" id="regConfirmPassword" placeholder="Confirm password" required>
+            </div>
+            <button type="submit">CREATE ACCOUNT</button>
+            <div id="reg-message-container" class="message-container"></div>
+        </form>
+
+        <!-- Reset effects button (now at bottom) -->
+        <button type="button" class="reset-btn" onclick="resetStyles()">Reset Effects</button>
+    </div>
+
+    <script>
+        // ========== SISTEMA DE MODOS ==========
+        const Mode = {
+            NORMAL: 'normal',
+            PIXEL: 'pixel'
+        };
+
+        function activateMode(mode) {
+            document.body.className = 'login-page';
+            document.getElementById('title').className = '';
+            
+            switch(mode) {
+                case Mode.PIXEL:
+                    document.body.classList.add('pixel-mode', 'pixel-bg');
+                    break;
+            }
+            localStorage.setItem('ftpy_style', mode);
+        }
+
+        function resetStyles() {
+            activateMode(Mode.NORMAL);
+            showMessage("Effects reset!", "var(--azul-claro)", "loginMessage");
+            setTimeout(() => location.reload(), 500);
+        }
+
+        // ========== SISTEMA DE CUENTAS (LocalStorage) ==========
+        const USERS_KEY = 'ftpy2_users';
+
+        // Inicializar usuarios si no existen
+        if (!localStorage.getItem(USERS_KEY)) {
+            // Crear usuario admin por defecto
+            const defaultUsers = [
+                { username: 'admin', password: '1234' }
+            ];
+            localStorage.setItem(USERS_KEY, JSON.stringify(defaultUsers));
+        }
+
+        function getUsers() {
+            return JSON.parse(localStorage.getItem(USERS_KEY)) || [];
+        }
+
+        function saveUsers(users) {
+            localStorage.setItem(USERS_KEY, JSON.stringify(users));
+        }
+
+        // ========== MOSTRAR MENSAJES ==========
+        function showMessage(text, color, containerId = 'message-container', extraClass = '') {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            const messageBox = document.createElement('div');
+            messageBox.textContent = text;
+            messageBox.style.color = color;
+            messageBox.classList.add('easter-egg-message');
+            if (extraClass) messageBox.classList.add(extraClass);
+            container.appendChild(messageBox);
+            
+            // Auto-eliminar después de 3 segundos
+            setTimeout(() => {
+                if (messageBox.parentNode) {
+                    messageBox.remove();
+                }
+            }, 3000);
+            
+            return messageBox;
+        }
+
+        // ========== SWITCH ENTRE LOGIN Y REGISTER ==========
+        window.showLogin = function() {
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('registerForm').style.display = 'none';
+            document.getElementById('loginTab').classList.add('active');
+            document.getElementById('registerTab').classList.remove('active');
+            // Limpiar mensajes
+            document.getElementById('message-container').innerHTML = '';
+            document.getElementById('reg-message-container').innerHTML = '';
+        };
+
+        window.showRegister = function() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'block';
+            document.getElementById('registerTab').classList.add('active');
+            document.getElementById('loginTab').classList.remove('active');
+            // Limpiar mensajes
+            document.getElementById('message-container').innerHTML = '';
+            document.getElementById('reg-message-container').innerHTML = '';
+        };
+
+        // ========== REGISTRO ==========
+        window.handleRegister = function(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('regUsername').value.trim();
+            const password = document.getElementById('regPassword').value.trim();
+            const confirm = document.getElementById('regConfirmPassword').value.trim();
+            const regMsgContainer = 'reg-message-container';
+            
+            // Limpiar mensajes anteriores
+            document.getElementById(regMsgContainer).innerHTML = '';
+            
+            // Validaciones
+            if (password !== confirm) {
+                showMessage("Passwords don't match!", "var(--error-color)", regMsgContainer);
+                return;
+            }
+            
+            if (username.length < 3) {
+                showMessage("Username must be at least 3 characters", "var(--error-color)", regMsgContainer);
+                return;
+            }
+            
+            if (password.length < 4) {
+                showMessage("Password must be at least 4 characters", "var(--error-color)", regMsgContainer);
+                return;
+            }
+            
+            const users = getUsers();
+            
+            // Verificar si el usuario ya existe
+            if (users.some(user => user.username.toLowerCase() === username.toLowerCase())) {
+                showMessage("Username already exists!", "var(--error-color)", regMsgContainer);
+                return;
+            }
+            
+            // Crear nuevo usuario
+            users.push({ username, password });
+            saveUsers(users);
+            
+            showMessage("Account created successfully! You can now login.", "var(--azul-claro)", regMsgContainer);
+            
+            // Limpiar campos
+            document.getElementById('regUsername').value = '';
+            document.getElementById('regPassword').value = '';
+            document.getElementById('regConfirmPassword').value = '';
+            
+            // Cambiar a login después de 1.5 segundos
+            setTimeout(() => {
+                showLogin();
+            }, 1500);
+        };
+
+        // ========== LOGIN (con Easter Eggs) ==========
+        window.handleLogin = function(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value.trim();
+            const button = event.target.querySelector('button');
+            const msgContainer = 'message-container';
+            
+            button.textContent = "VERIFYING...";
+            document.getElementById(msgContainer).innerHTML = '';
+            
+            // ===== EASTER EGGS (siempre disponibles) =====
+            
+            // CASO ESPECIAL: KIRB
+            if (username === "KirByteBi" || username === "Kirb" || username === "kirb") {
+                const kirbPasswords = ["GameOver07", "GameOver637"];
+                if (kirbPasswords.includes(password)) {
+                    document.getElementById(msgContainer).innerHTML = '';
+                    showMessage("Welcome back Kirb, our best Owner", "var(--blanco)", msgContainer);
+                    setTimeout(() => {
+                        showMessage("- Pixible", "var(--azul-claro)", msgContainer);
+                    }, 500);
+                    button.textContent = "WELCOME OWNER!";
+                    setTimeout(() => {
+                        window.location.href = 'FtPy-en.html';
+                    }, 2500);
+                    return;
+                }
+            }
+            
+            // Trio members
+            if (["Nooby", "Vinni", "Carl", "Smash"].includes(username)) {
+                handleTrioMember(username, button);
+                return;
+            }
+            
+            // NOeye
+            if (username === "NOeye") {
+                showMessage("YOU DON'T HAVE ACCESS TO OUR WEBSITE", "var(--azul-claro)", msgContainer);
+                button.textContent = "ENTER";
+                return;
+            }
+            
+            // ===== LOGIN NORMAL (contra usuarios registrados) =====
+            const users = getUsers();
+            const user = users.find(u => u.username === username && u.password === password);
+            
+            if (user) {
+                // Login exitoso
+                showMessage("Login successful! Welcome to Bitlands.", "var(--azul-claro)", msgContainer);
+                button.textContent = "WELCOME!";
+                setTimeout(() => {
+                    window.location.href = 'FtPy-en.html';
+                }, 1500);
+            } else {
+                showMessage("Invalid username or password", "var(--error-color)", msgContainer);
+                button.textContent = "ENTER";
+            }
+        };
+
+        // ========== FUNCIÓN ESPECIAL PARA EL TRIO ==========
+        function handleTrioMember(username, button) {
+            const mainMessage = "Welcome! The Trio has been reunited. :|";
+            const userDetails = {
+                "Nooby": {
+                    message: "Never stopped Painting... Huh?",
+                    colorClass: "nooby-color"
+                },
+                "Vinni": {
+                    message: "The kindest Guest of his type",
+                    colorClass: "vinni-color"
+                },
+                "Carl": {
+                    message: "A gun! Give me the freaking gun!",
+                    colorClass: "carl-color"
+                },
+                "Smash": {
+                    message: "He made Find the Pyces, cool right?",
+                    colorClass: "smash-color",
+                    effect: (element) => {
+                        element.style.animation = "shake 0.5s";
+                    }
+                }
+            };
+
+            document.getElementById('message-container').innerHTML = '';
+            showMessage(mainMessage, "var(--lila)", 'message-container');
+            button.textContent = "THE GANG IS BACK!";
+            
+            setTimeout(() => {
+                const user = userDetails[username];
+                const msgElement = showMessage(user.message, '', 'message-container', user.colorClass);
+                
+                if (user.effect) {
+                    user.effect(msgElement);
+                }
+                
+                setTimeout(() => {
+                    window.location.href = 'FtPy-en.html';
+                }, 3000);
+            }, 2000);
+        }
+
+        // ========== INICIALIZACIÓN ==========
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedMode = localStorage.getItem('ftpy_style');
+            if(savedMode && savedMode !== Mode.NORMAL) {
+                activateMode(savedMode);
+            }
+        });
+    </script>
+</body>
+</html>
